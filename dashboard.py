@@ -12,11 +12,18 @@ import streamlit as st
 from dotenv import load_dotenv
 from groq import Groq
 
-# Cargar variables de entorno
+# Cargar variables de entorno (compatible con Local y Streamlit Cloud)
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+def obtener_secret(key):
+    if key in st.secrets:
+        return st.secrets[key]
+    return os.getenv(key)
+
+
+DATABASE_URL = obtener_secret("DATABASE_URL")
+GROQ_API_KEY = obtener_secret("GROQ_API_KEY")
 
 # Configuración inicial de la página
 st.set_page_config(
